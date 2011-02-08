@@ -3,28 +3,14 @@
 # Usage: ruby xmlize.rb <path/to/CHILDES/root>
 
 require 'progressbar'
-
-def scan(dir)
-  if not dir.split('/').pop =~ /^\./ and File.directory?(dir)
-    Dir.foreach(dir) do |file|
-      path = File.join(dir,file)
-      
-      if File.directory?(path)
-#        puts "SCANNING #{path}"
-        scan(path)
-      elsif path =~ /cha$/
-        output = path.gsub(/\.cha$/,".xml")
-        @files.push [path,output]
-      end
-    end
-  end
-end
+require 'tools/util'
 
 @cha2xml = "ruby tools/cha2xml.rb --braces --clean --minipar --tag"
 @files = []
 
 path = ARGV.shift
-Dir.foreach(path) { |dir| scan(File.join(path,dir)) if not dir =~ /^\./ }
+Dir.foreach(path) { |dir| @files.push scan(File.join(path,dir)) if not dir =~ /^\./ }
+@files.flatten!(1)
 
 STDERR.puts "Converting #{@files.size} .cha files to XML"
 progress = ProgressBar.new("Converting",@files.size)

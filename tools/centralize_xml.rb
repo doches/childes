@@ -20,4 +20,6 @@ def clone(from,to)
 	end
 end
 
+`mkdir -p #{output}` if not File.exists?(output)
+
 clone(input,output)

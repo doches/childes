@@ -6,10 +6,116 @@ mention the metadata!) is, to put it mildly, highly irregular.
 
 In short, it's a mess.
 
-## Tools
-
 This repository is a central place for various CHILDES-related tools, scripts, and hacks. The first of these are a set of scripts to wrangle the `.cha` format (the 'highly irregular' thing above) into sanity-inducing XML, adding in POS tags and dependency parses along the way.
 
-*Documentation for individual scripts to follow*
+### Tasks
+
+#### Produce an XML version of CHILDES in xml/ (do this first!)
+
+    ruby tools/xmlize.rb Eng-USA/ && ruby tools/centralize_xml.rb Eng-USA/ xml/
+
+#### Get a list of nouns (and filter by WordNet)
+
+    ruby tools/extract_nouns.rb xml/ | ruby tools/filter_nouns.rb > childes.nouns
+
+#### Build a basic clustering using WordNet hypernyms
+
+    cat childes.nouns | ruby tools/cluster_nouns.rb > childes.wordnet_cluster
+
+## cha2xml
+
+**cha2xml** reads a `.cha` file from standard input and outputs a (comparatively) sane XML file to standard out. You probably don't want to use it directly; instead, take a look at **xmlize** below.
+
+#### Usage
+
+    [cat something.cha] | ruby tools/cha2xml.rb <options>
+
+#### Options
+**xmlize** calls cha2xml with *all* of these options on by default.
+
+   + **--braces** Strip out experimenter annotations ("foo [this is a note] bar") from utterances.
+   + **--clean** Remove words containing nonsensical (i.e. non-word) characters.
+   + **--minipar** Run utterances through MINIPAR, including the result in the `<parse>` tag. Looks for `./vendor/pdemo/pdemo`, with data files in `./vendor/data`.
+   + **--tag** Run utterances through a pure Ruby implementation of the Brill tagger, including the result in the `<tags>` tag.
+
+
+
+
+
+## xmlize
+Scans a directory for `.cha` files, converting any it finds into dialog XML using **cha2xml**. The resulting XML files are written to disk alongside their `.cha` equivalents.
+
+#### Usage
+
+    ruby tools/xmlize.rb path/to/CHILDES/root
+
+
+
+
+
+## centralize_xml
+Replicates a directory structure containing mixed `.cha` and XML, copying only XML files over into the new structure. Use this after **xmlize**, to build a version of CHILDES containing only XML. You don't have to do this (other tools will silently ignore `.cha` files, preferring XML), but it satisfies my housekeeping urges.
+
+The output directory will be created if it does not exist.
+#### Usage
+
+    ruby tools/centralize_xml.rb path/to/CHILDES/root path/to/xml/root
+
+
+
+
+## extract_nouns
+Looks recursively in a directory for xml, scanning each file found
+for nouns in the POS tag list and outputting a list of all nouns
+found (plus counts) to standard output.
+
+#### Usage
+
+    ruby tools/extract_nouns.rb path/to/xml/root
+
+
+
+
+
+## filter_nouns
+Reads a list of noun/counts (as output by extract_nouns) from STDIN,
+filtering the list to include only nouns appearing in WordNet (as nouns). Requires [doches/rwordnet][].
+ 
+#### Usage
+
+    [cat noun.txt] | ruby tools/filter_nouns.rb
+
+
+
+
+
+## cluster_nouns
+Reads a list of noun/count pairs from standard input (like the output of
+extract_nouns or filter_nouns) and prints a YAML clustering based
+on their first-order WordNet synsets to standard out.
+
+#### Usage
+
+    [cat noun.list] | ruby tools/cluster_wordnet_nouns.rb
+
+
+
+
+
+## xml2corpus
+Takes an XML file, extracts all of the utterances, and prints a TargetCorpus
+(see [doches/corncob][]) using nouns from the POStag list as target words. Like **cha2xml**, you probably want to call
+this automatically from some other script.
+
+#### Usage
+
+    ruby tools/xml2corpus.rb path/to/childes.xml
+
+
+
+
+
 
   [CHILDES]: http://childes.psy.cmu.edu/
+  [doches/corncob]: http://github.com/doches/corncob
+  [doches/rwordnet]: http://github.com/doches/rwordnet

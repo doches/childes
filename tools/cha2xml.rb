@@ -1,19 +1,11 @@
 # Reads a CHILDES .cha file from STDIN and outputs XML file containing cleaned
 # dialog to STDOUT
 #
-# Usage: ruby cha2xml.rb <path/to/kid.cha>
+# Usage: [cat thing.cha] | ruby cha2xml.rb
 
 require 'nokogiri'
 require 'progressbar'
-
-def check_option(key)
-  if ARGV.include?("--#{key}") or ARGV.include?("-#{key[0].chr}")
-    ARGV.reject! { |x| x == "--#{key}" or x == "-#{key[0].chr}" }
-    @options[key] = true
-  else
-  	@options[key] = false
-  end
-end
+require 'tools/util'
 
 @options = {}
 check_option "braces"
