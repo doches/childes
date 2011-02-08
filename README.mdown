@@ -1,0 +1,15 @@
+# Scripts for CHILDES
+
+If you've ever tried to work with the [CHILDES][] corpus before, you know that dealing with it can be...difficult. It's
+organized into a tremendous number of flat text files, one per session; the file format used to encode the session transcript (not to
+mention the metadata!) is, to put it mildly, highly irregular. 
+
+In short, it's a mess.
+
+## Tools
+
+This repository is a central place for various CHILDES-related tools, scripts, and hacks. The first of these are a set of scripts to wrangle the `.cha` format (the 'highly irregular' thing above) into sanity-inducing XML, adding in POS tags and dependency parses along the way.
+
+*Documentation for individual scripts to follow*
+
+  [CHILDES]: http://childes.psy.cmu.edu/

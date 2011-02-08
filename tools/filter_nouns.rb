@@ -12,7 +12,6 @@ STDIN.each_line do |line|
 	lemma = index.find(noun)
 	if not lemma.nil?
 		print line
-		
-		puts lemma.synsets[0].expanded_hypernym.map { |synset| synset.words }.join(" / ")
+#		puts lemma.synsets[0].expanded_hypernym.map { |synset| synset.words }.join(" / ")
 	end
 end
