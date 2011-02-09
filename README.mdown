@@ -115,6 +115,18 @@ this automatically from some other script.
 
 
 
+## corpusize
+Takes a path to a directory containing XML (as ouput by **cha2xml**),
+finds all of the utterances therein, and writes a target corpus of
+all of them to standard out. 
+
+#### Usage
+
+    ruby tools/corpusize.rb path/to/xml/root
+
+
+
+
 
   [CHILDES]: http://childes.psy.cmu.edu/
   [doches/corncob]: http://github.com/doches/corncob
