@@ -2,7 +2,7 @@
 
 # Scan a directory, returning a list of paths (relative to `dir`'s root) to all
 # XML files found therein.
-def scan(dir)
+def scan(dir,match=/\.cha$/)
   files = []
   if not dir.split('/').pop =~ /^\./ and File.directory?(dir)
     Dir.foreach(dir) do |file|
@@ -10,14 +10,13 @@ def scan(dir)
       
       if File.directory?(path)
 #        puts "SCANNING #{path}"
-        scan(path).each { |pair| files.push pair }
-      elsif path =~ /cha$/
-        output = path.gsub(/\.cha$/,".xml")
-        files.push [path,output]
+        scan(path,match).each { |pair| files.push pair }
+      elsif file =~ match
+        files.push path
       end
     end
   end
-  
+
   return files
 end
 

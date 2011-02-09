@@ -6,11 +6,7 @@ require 'progressbar'
 require 'tools/util'
 
 @cha2xml = "ruby tools/cha2xml.rb --braces --clean --minipar --tag"
-@files = []
-
-path = ARGV.shift
-Dir.foreach(path) { |dir| @files.push scan(File.join(path,dir)) if not dir =~ /^\./ }
-@files.flatten!(1)
+@files = scan(ARGV.shift,/\.cha$/).map { |file| [file,file.gsub(/\.cha$/,".xml")] }
 
 STDERR.puts "Converting #{@files.size} .cha files to XML"
 progress = ProgressBar.new("Converting",@files.size)
