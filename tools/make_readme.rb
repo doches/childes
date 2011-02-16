@@ -6,7 +6,7 @@
 # Format:
 # See this header in `tools/make_readme.rb`
 #
-# Special keys:
+# Special_keys:
 # **make_readme** understands a few special flags:
 # 
 #    + **@nodoc** -- don't include documentation for this tool in the README.
@@ -30,7 +30,7 @@ Dir.foreach(tooldir) do |file|
 					links[$1.strip] = $2.strip
 				elsif line =~ /^([^ :]+): ?(.+)?/
 					# A subheading, with optional code afterwards (e.g. "Options:" or "Usage: ...code...")
-					header.push "\n#### #{$1.capitalize}\n\n"
+					header.push "\n#### #{$1.capitalize.gsub("_"," ")}\n\n"
 					header.push "    #{$2.rstrip}\n\n" if $2
 				else
 					# Just a normal line

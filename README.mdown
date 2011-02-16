@@ -34,8 +34,6 @@ using [doches/corncob][].
 
 #### Usage
 
-    ruby tools/corpusize.rb path/to/xml/root
-
 
 
 
@@ -49,8 +47,6 @@ Requires [doches/rwordnet][].
 
 #### Usage
 
-    [cat noun.txt] | ruby tools/filter_nouns.rb
-
 
 
 
@@ -61,8 +57,6 @@ Reads a [CHILDES][] .cha file from STDIN and outputs XML file containing cleaned
 dialog to STDOUT
 
 #### Usage
-
-    [cat thing.cha] | ruby cha2xml.rb <options>
 
 
 #### Options
@@ -84,8 +78,6 @@ mapping (tab-delimited) of child age to filename.
 
 #### Usage
 
-    ruby tools/build_agemap.rb path/to/childes
-
 
 
 
@@ -97,13 +89,13 @@ README.mdown
 
 #### Usage
 
-    ruby tools/make_readme.rb
-
 
 #### Format
 
 See this header in `tools/make_readme.rb`
-Special keys:
+
+#### Special keys
+
 **make_readme** understands a few special flags:
 
    + **@nodoc** -- don't include documentation for this tool in the README.
@@ -122,8 +114,6 @@ but it satisfies my housekeeping urges.
 
 #### Usage
 
-    ruby tools/centralize_xml.rb path/to/CHILDES/input path/to/xml/output
-
 
 
 
@@ -136,8 +126,6 @@ found (plus counts)
 
 #### Usage
 
-    ruby tools/extract_nouns.rb path/to/xml/root
-
 
 
 
@@ -147,8 +135,6 @@ found (plus counts)
 Scans a diretory for .cha files, converting any it finds into dialog XML
 
 #### Usage
-
-    ruby xmlize.rb <path/to/CHILDES/root>
 
 
 
@@ -164,8 +150,6 @@ Takes an optional key to ignore (e.g. CHI)
 
 #### Usage
 
-    ruby tools/xml2corpus.rb path/to/childes.xml <ignore_key>
-
 
 
 
@@ -179,8 +163,6 @@ Requires [doches/rwordnet][].
 
 #### Usage
 
-    [cat noun.list] | ruby tools/cluster_wordnet_nouns.rb
-
 
 
 
@@ -191,8 +173,6 @@ Reads an agemap from standard input and creates a set of corpora in <output>,
 one per each six-month period
 
 #### Usage
-
-    cat [agemap] | ruby tools/agemap2corpora.rb path/to/output
 
 
 
@@ -205,8 +185,6 @@ words from a list, printing the result to standard out. Used to clean up the out
 of **xml2corpus** according to the output of **filter_nouns**.
 
 #### Usage
-
-    [cat file.target_corpus] | ruby tools/filter_corpus.rb path/to/nouns.filtered
 
 
 
