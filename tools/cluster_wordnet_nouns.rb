@@ -1,8 +1,12 @@
 # Reads a list of noun/count pairs from STDIN (like the output of
 # extract_nouns or filter_nouns) and prints a yaml clustering based
-# on their first-order WordNet synsets.
+# on their first-order WordNet synsets. 
+#
+# Requires [doches/rwordnet][].
 #
 # Usage: [cat noun.list] | ruby tools/cluster_wordnet_nouns.rb
+#
+# @link doches/rwordnet http://github.com/doches/rwordnet
 
 require 'wordnet'
 

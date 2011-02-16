@@ -1,8 +1,12 @@
 # Takes a path to a directory containing XML (as ouput by **cha2xml**),
 # finds all of the utterances therein, and writes a target corpus of
-# all of them to standard out.
+# all of them to standard out. Basically a wrapper around **xml2corpus**,
+# and probably the sort of thing you're only interested in if you're also
+# using [doches/corncob][].
 #
 # Usage: ruby tools/corpusize.rb path/to/xml/root
+#
+# @link doches/corncob http://github.com/doches/corncob
 
 require 'tools/util'
 require 'progressbar'

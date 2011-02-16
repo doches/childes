@@ -1,4 +1,4 @@
-# Looks recursively in <dir> for xml, scanning each file found
+# Looks recursively in a directory for xml, scanning each file found
 # for nouns in the POS tag list and outputting a list of all nouns
 # found (plus counts)
 #

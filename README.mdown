@@ -22,103 +22,15 @@ This repository is a central place for various CHILDES-related tools, scripts, a
 
     cat childes.nouns | ruby tools/cluster_nouns.rb > childes.wordnet_cluster
 
-## cha2xml
-
-**cha2xml** reads a `.cha` file from standard input and outputs a (comparatively) sane XML file to standard out. You probably don't want to use it directly; instead, take a look at **xmlize** below.
-
-#### Usage
-
-    [cat something.cha] | ruby tools/cha2xml.rb <options>
-
-#### Options
-**xmlize** calls cha2xml with *all* of these options on by default.
-
-   + **--braces** Strip out experimenter annotations ("foo [this is a note] bar") from utterances.
-   + **--clean** Remove words containing nonsensical (i.e. non-word) characters.
-   + **--minipar** Run utterances through MINIPAR, including the result in the `<parse>` tag. Looks for `./vendor/pdemo/pdemo`, with data files in `./vendor/data`.
-   + **--tag** Run utterances through a pure Ruby implementation of the Brill tagger, including the result in the `<tags>` tag.
-
-
-
-
-
-## xmlize
-Scans a directory for `.cha` files, converting any it finds into dialog XML using **cha2xml**. The resulting XML files are written to disk alongside their `.cha` equivalents.
-
-#### Usage
-
-    ruby tools/xmlize.rb path/to/CHILDES/root
-
-
-
-
-
-## centralize_xml
-Replicates a directory structure containing mixed `.cha` and XML, copying only XML files over into the new structure. Use this after **xmlize**, to build a version of CHILDES containing only XML. You don't have to do this (other tools will silently ignore `.cha` files, preferring XML), but it satisfies my housekeeping urges.
-
-The output directory will be created if it does not exist.
-#### Usage
-
-    ruby tools/centralize_xml.rb path/to/CHILDES/root path/to/xml/root
-
-
-
-
-## extract_nouns
-Looks recursively in a directory for xml, scanning each file found
-for nouns in the POS tag list and outputting a list of all nouns
-found (plus counts) to standard output.
-
-#### Usage
-
-    ruby tools/extract_nouns.rb path/to/xml/root
-
-
-
-
-
-## filter_nouns
-Reads a list of noun/counts (as output by extract_nouns) from STDIN,
-filtering the list to include only nouns appearing in WordNet (as nouns). Requires [doches/rwordnet][].
- 
-#### Usage
-
-    [cat noun.txt] | ruby tools/filter_nouns.rb
-
-
-
-
-
-## cluster_nouns
-Reads a list of noun/count pairs from standard input (like the output of
-extract_nouns or filter_nouns) and prints a YAML clustering based
-on their first-order WordNet synsets to standard out.
-
-#### Usage
-
-    [cat noun.list] | ruby tools/cluster_wordnet_nouns.rb
-
-
-
-
-
-## xml2corpus
-Takes an XML file, extracts all of the utterances, and prints a TargetCorpus
-(see [doches/corncob][]) using nouns from the POStag list as target words. Like **cha2xml**, you probably want to call
-this automatically from some other script.
-
-#### Usage
-
-    ruby tools/xml2corpus.rb path/to/childes.xml
-
-
-
-
+### Tools
 
 ## corpusize
+
 Takes a path to a directory containing XML (as ouput by **cha2xml**),
 finds all of the utterances therein, and writes a target corpus of
-all of them to standard out. 
+all of them to standard out. Basically a wrapper around **xml2corpus**,
+and probably the sort of thing you're only interested in if you're also
+using [doches/corncob][].
 
 #### Usage
 
@@ -128,6 +40,178 @@ all of them to standard out.
 
 
 
-  [CHILDES]: http://childes.psy.cmu.edu/
+## filter\_nouns
+
+Reads a list of noun/counts (as output by extract_nouns) from STDIN,
+filtering the list to include only nouns appearing in WordNet (as nouns).
+Requires [doches/rwordnet][].
+
+
+#### Usage
+
+    [cat noun.txt] | ruby tools/filter_nouns.rb
+
+
+
+
+
+## cha2xml
+
+Reads a [CHILDES][] .cha file from STDIN and outputs XML file containing cleaned
+dialog to STDOUT
+
+#### Usage
+
+    [cat thing.cha] | ruby cha2xml.rb <options>
+
+
+#### Options
+
+**xmlize** calls cha2xml with *all* of these options on by default
+
+   + **--braces** Strip out experimenter annotations ("foo [this is a note] bar") from utterances.
+   + **--clean** Remove words containing nonsensical (i.e. non-word) characters.
+   + **--minipar** Run utterances through MINIPAR, including the result in the `<parse>` tag. Looks for `./vendor/pdemo/pdemo`, with data files in `./vendor/data`.
+   + **--tag** Run utterances through a pure Ruby implementation of the Brill tagger, including the result in the `<tags>` tag.
+
+
+
+
+## build\_agemap
+
+Takes a directory containing CHILDES XML and prints a 
+mapping (tab-delimited) of child age to filename.
+
+#### Usage
+
+    ruby tools/build_agemap.rb path/to/childes
+
+
+
+
+
+## make\_readme
+
+Adds tool sections to README.mdown.skel, and outputs a final
+README.mdown
+
+#### Usage
+
+    ruby tools/make_readme.rb
+
+
+#### Format
+
+See this header in `tools/make_readme.rb`
+Special keys:
+**make_readme** understands a few special flags:
+
+   + **@nodoc** -- don't include documentation for this tool in the README.
+   + **@link [key] [url]** -- add a url reference to the bottom of the README (e.g. `@link CHILDES http://childes.psy.cmu.edu/`).
+
+
+
+
+## centralize\_xml
+
+Replicates the directory structure of *input* in *output*, copying
+only xml files over into the new structure. Use this after **xmlize**, 
+to build a version of CHILDES containing only XML. You don't have to 
+do this (other tools will silently ignore `.cha` files, preferring XML), 
+but it satisfies my housekeeping urges.
+
+#### Usage
+
+    ruby tools/centralize_xml.rb path/to/CHILDES/input path/to/xml/output
+
+
+
+
+
+## extract\_nouns
+
+Looks recursively in a directory for xml, scanning each file found
+for nouns in the POS tag list and outputting a list of all nouns
+found (plus counts)
+
+#### Usage
+
+    ruby tools/extract_nouns.rb path/to/xml/root
+
+
+
+
+
+## xmlize
+
+Scans a diretory for .cha files, converting any it finds into dialog XML
+
+#### Usage
+
+    ruby xmlize.rb <path/to/CHILDES/root>
+
+
+
+
+
+## xml2corpus
+
+Takes an XML file, extracts all of the utterances, and prints a TargetCorpus
+(see [doches/corncob][]) using nouns from the POStag list as target words.
+Like **cha2xml**, you probably want to call this automatically from some 
+other script.
+Takes an optional key to ignore (e.g. CHI)
+
+#### Usage
+
+    ruby tools/xml2corpus.rb path/to/childes.xml <ignore_key>
+
+
+
+
+
+## cluster\_wordnet\_nouns
+
+Reads a list of noun/count pairs from STDIN (like the output of
+extract_nouns or filter_nouns) and prints a yaml clustering based
+on their first-order WordNet synsets. 
+Requires [doches/rwordnet][].
+
+#### Usage
+
+    [cat noun.list] | ruby tools/cluster_wordnet_nouns.rb
+
+
+
+
+
+## agemap2corpora
+
+Reads an agemap from standard input and creates a set of corpora in <output>,
+one per each six-month period
+
+#### Usage
+
+    cat [agemap] | ruby tools/agemap2corpora.rb path/to/output
+
+
+
+
+
+## filter\_corpus
+
+Filters a target corpus (from standard input) to include only lines involving target
+words from a list, printing the result to standard out. Used to clean up the output 
+of **xml2corpus** according to the output of **filter_nouns**.
+
+#### Usage
+
+    [cat file.target_corpus] | ruby tools/filter_corpus.rb path/to/nouns.filtered
+
+
+
+
+
   [doches/corncob]: http://github.com/doches/corncob
   [doches/rwordnet]: http://github.com/doches/rwordnet
+  [CHILDES]: http://childes.psy.cmu.edu/

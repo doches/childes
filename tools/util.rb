@@ -1,3 +1,4 @@
+# @nodoc
 # Utility functions for CHILDES hacks.
 
 # Scan a directory, returning a list of paths (relative to `dir`'s root) to all

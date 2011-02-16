@@ -1,7 +1,17 @@
-# Reads a CHILDES .cha file from STDIN and outputs XML file containing cleaned
+# Reads a [CHILDES][] .cha file from STDIN and outputs XML file containing cleaned
 # dialog to STDOUT
 #
-# Usage: [cat thing.cha] | ruby cha2xml.rb
+# Usage: [cat thing.cha] | ruby cha2xml.rb <options>
+#
+# Options: 
+# **xmlize** calls cha2xml with *all* of these options on by default
+# 
+#    + **--braces** Strip out experimenter annotations ("foo [this is a note] bar") from utterances.
+#    + **--clean** Remove words containing nonsensical (i.e. non-word) characters.
+#    + **--minipar** Run utterances through MINIPAR, including the result in the `<parse>` tag. Looks for `./vendor/pdemo/pdemo`, with data files in `./vendor/data`.
+#    + **--tag** Run utterances through a pure Ruby implementation of the Brill tagger, including the result in the `<tags>` tag.
+#
+# @link CHILDES http://childes.psy.cmu.edu/
 
 require 'nokogiri'
 require 'progressbar'

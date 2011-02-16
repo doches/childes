@@ -1,9 +1,13 @@
 # Takes an XML file, extracts all of the utterances, and prints a TargetCorpus
-# (see doches/corncob) using nouns from the POStag list as target words.
+# (see [doches/corncob][]) using nouns from the POStag list as target words.
+# Like **cha2xml**, you probably want to call this automatically from some 
+# other script.
 #
 # Takes an optional key to ignore (e.g. CHI)
 #
 # Usage: ruby tools/xml2corpus.rb path/to/childes.xml <ignore_key>
+#
+# @link doches/corncob http://github.com/doches/corncob
 
 require 'nokogiri'
 

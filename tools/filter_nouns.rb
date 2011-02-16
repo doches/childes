@@ -1,7 +1,10 @@
 # Reads a list of noun/counts (as output by extract_nouns) from STDIN,
-# filtering the list to include only nouns appearing in WordNet (as nouns)
+# filtering the list to include only nouns appearing in WordNet (as nouns).
+# Requires [doches/rwordnet][].
 # 
 # Usage: [cat noun.txt] | ruby tools/filter_nouns.rb
+#
+# @link doches/rwordnet http://github.com/doches/rwordnet
 
 require 'wordnet'
 
