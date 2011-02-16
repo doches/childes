@@ -1,13 +1,17 @@
 # Takes an XML file, extracts all of the utterances, and prints a TargetCorpus
 # (see doches/corncob) using nouns from the POStag list as target words.
 #
-# Usage: ruby tools/xml2corpus.rb path/to/childes.xml
+# Takes an optional key to ignore (e.g. CHI)
+#
+# Usage: ruby tools/xml2corpus.rb path/to/childes.xml <ignore_key>
 
 require 'nokogiri'
 
 xml = Nokogiri::XML(File.open(ARGV.shift))
+key = ARGV.empty? ? nil : ARGV.shift
 
 utterances = xml.xpath("//utterance").each do |utterance|
+	speaker = (utterance/"speaker").text
   tags = (utterance/"tags").text.split(/\s+/)
   sentence = (utterance/"text").text.split(/\s+/)
   
@@ -23,7 +27,7 @@ utterances = xml.xpath("//utterance").each do |utterance|
         puts [word,sentence[0..i-1],sentence[i+1..sentence.size]].flatten.join(" ")
       end
     end
-  end if sentence.size > 1
+  end if sentence.size > 1 && speaker != key
 end
 
 #tags = xml.xpath("//tags").map { |x| x.text.split(/\s+/).map { |y| y.split("/") } }
