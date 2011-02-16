@@ -9,9 +9,10 @@
 #    + **--braces** Strip out experimenter annotations ("foo [this is a note] bar") from utterances.
 #    + **--clean** Remove words containing nonsensical (i.e. non-word) characters.
 #    + **--minipar** Run utterances through MINIPAR, including the result in the `<parse>` tag. Looks for `./vendor/pdemo/pdemo`, with data files in `./vendor/data`.
-#    + **--tag** Run utterances through a [pure Ruby implementation of the Brill tagger](http://rubygems.org/gems/rbtagger), including the result in the `<tags>` tag.
+#    + **--tag** Run utterances through a [pure Ruby implementation of the Brill tagger][rbtagger], including the result in the `<tags>` tag.
 #
 # @link CHILDES http://childes.psy.cmu.edu/
+# @link rbtagger http://rubygems.org/gems/rbtagger
 
 require 'nokogiri'
 require 'progressbar'

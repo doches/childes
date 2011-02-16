@@ -34,6 +34,8 @@ using [doches/corncob][].
 
 #### Usage
 
+    ruby tools/corpusize.rb path/to/xml/root
+
 
 
 
@@ -47,6 +49,8 @@ Requires [doches/rwordnet][].
 
 #### Usage
 
+    [cat noun.txt] | ruby tools/filter_nouns.rb
+
 
 
 
@@ -58,6 +62,8 @@ dialog to STDOUT
 
 #### Usage
 
+    [cat thing.cha] | ruby cha2xml.rb <options>
+
 
 #### Options
 
@@ -66,7 +72,7 @@ dialog to STDOUT
    + **--braces** Strip out experimenter annotations ("foo [this is a note] bar") from utterances.
    + **--clean** Remove words containing nonsensical (i.e. non-word) characters.
    + **--minipar** Run utterances through MINIPAR, including the result in the `<parse>` tag. Looks for `./vendor/pdemo/pdemo`, with data files in `./vendor/data`.
-   + **--tag** Run utterances through a [pure Ruby implementation of the Brill tagger](http://rubygems.org/gems/rbtagger), including the result in the `<tags>` tag.
+   + **--tag** Run utterances through a [pure Ruby implementation of the Brill tagger][rbtagger], including the result in the `<tags>` tag.
 
 
 
@@ -78,28 +84,8 @@ mapping (tab-delimited) of child age to filename.
 
 #### Usage
 
+    ruby tools/build_agemap.rb path/to/childes
 
-
-
-
-## make\_readme
-
-Adds tool sections to README.mdown.skel, and outputs a final
-README.mdown
-
-#### Usage
-
-
-#### Format
-
-See this header in `tools/make_readme.rb`
-
-#### Special keys
-
-**make_readme** understands a few special flags:
-
-   + **@nodoc** -- don't include documentation for this tool in the README.
-   + **@link [key] [url]** -- add a url reference to the bottom of the README (e.g. `@link CHILDES http://childes.psy.cmu.edu/`).
 
 
 
@@ -114,6 +100,8 @@ but it satisfies my housekeeping urges.
 
 #### Usage
 
+    ruby tools/centralize_xml.rb path/to/CHILDES/input path/to/xml/output
+
 
 
 
@@ -126,6 +114,8 @@ found (plus counts)
 
 #### Usage
 
+    ruby tools/extract_nouns.rb path/to/xml/root
+
 
 
 
@@ -135,6 +125,8 @@ found (plus counts)
 Scans a diretory for .cha files, converting any it finds into dialog XML
 
 #### Usage
+
+    ruby xmlize.rb <path/to/CHILDES/root>
 
 
 
@@ -150,6 +142,8 @@ Takes an optional key to ignore (e.g. CHI)
 
 #### Usage
 
+    ruby tools/xml2corpus.rb path/to/childes.xml <ignore_key>
+
 
 
 
@@ -163,6 +157,8 @@ Requires [doches/rwordnet][].
 
 #### Usage
 
+    [cat noun.list] | ruby tools/cluster_wordnet_nouns.rb
+
 
 
 
@@ -173,6 +169,8 @@ Reads an agemap from standard input and creates a set of corpora in <output>,
 one per each six-month period
 
 #### Usage
+
+    cat [agemap] | ruby tools/agemap2corpora.rb path/to/output
 
 
 
@@ -186,6 +184,8 @@ of **xml2corpus** according to the output of **filter_nouns**.
 
 #### Usage
 
+    [cat file.target_corpus] | ruby tools/filter_corpus.rb path/to/nouns.filtered
+
 
 
 
@@ -193,3 +193,4 @@ of **xml2corpus** according to the output of **filter_nouns**.
   [doches/corncob]: http://github.com/doches/corncob
   [doches/rwordnet]: http://github.com/doches/rwordnet
   [CHILDES]: http://childes.psy.cmu.edu/
+  [rbtagger]: http://rubygems.org/gems/rbtagger
