@@ -3,8 +3,11 @@
 #
 # Usage: cat [agemap] | ruby tools/agemap2corpora.rb path/to/output
 
+require 'progressbar'
+
 output = ARGV.shift
-`mkdir -p #{output}` if not File.exists?(output)
+partdir = "partials"
+`mkdir -p #{File.join(output,partdir)}` if not File.exists?(File.join(output,partdir))
 
 bins = {}
 STDIN.each_line do |line|
@@ -15,14 +18,16 @@ STDIN.each_line do |line|
 end
 
 # Parse each age/bin corpus
-partdir = "partials"
 progress = ProgressBar.new("Corpusizing",bins.size)
 bins.each_pair do |age,list|
-	text = list.map { |pair| `ruby tools/xml2corpus.rb #{pair[1]} #{pair[0]}` }.join("")
+	path = File.join(output,partdir,"#{age}.target_corpus")
+	if not File.exists?(path)
+		text = list.map { |pair| `ruby tools/xml2corpus.rb #{pair[1]} #{pair[0]}` }.join("")
 	
-	fout = File.open(File.join(output,partdir,"#{age}.target_corpus"),"w")
-	fout.puts text
-	fout.close
+		fout = File.open(path,"w")
+		fout.puts text
+		fout.close
+	end
 	progress.inc
 end
 progress.finish
