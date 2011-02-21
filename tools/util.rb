@@ -25,6 +25,8 @@ end
 # and removes it from the argument list. Also checks for GNU-style shorthands ('-f' for '--foo') using the first character of an
 # option's name. KEEP THEM UNIQUE!
 def check_option(key)
+  @options ||= {}
+  
   if ARGV.include?("--#{key}") or ARGV.include?("-#{key[0].chr}")
     ARGV.reject! { |x| x == "--#{key}" or x == "-#{key[0].chr}" }
     @options[key] = true

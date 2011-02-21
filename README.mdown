@@ -24,6 +24,21 @@ This repository is a central place for various CHILDES-related tools, scripts, a
 
 ### Tools
 
+## cluster\_wordnet\_nouns
+
+Reads a list of noun/count pairs from STDIN (like the output of
+extract_nouns or filter_nouns) and prints a yaml clustering based
+on their first-order WordNet synsets. 
+Requires [doches/rwordnet][].
+
+#### Usage
+
+    [cat noun.list] | ruby tools/cluster_wordnet_nouns.rb
+
+
+
+
+
 ## corpusize
 
 Takes a path to a directory containing XML (as ouput by **cha2xml**),
@@ -40,16 +55,60 @@ using [doches/corncob][].
 
 
 
-## filter\_nouns
+## centralize\_xml
 
-Reads a list of noun/counts (as output by extract_nouns) from STDIN,
-filtering the list to include only nouns appearing in WordNet (as nouns).
-Requires [doches/rwordnet][].
-
+Replicates the directory structure of *input* in *output*, copying
+only xml files over into the new structure. Use this after **xmlize**, 
+to build a version of CHILDES containing only XML. You don't have to 
+do this (other tools will silently ignore `.cha` files, preferring XML), 
+but it satisfies my housekeeping urges.
 
 #### Usage
 
-    [cat noun.txt] | ruby tools/filter_nouns.rb
+    ruby tools/centralize_xml.rb path/to/CHILDES/input path/to/xml/output
+
+
+
+
+
+## build\_agemap
+
+Takes a directory containing CHILDES XML and prints a 
+mapping (tab-delimited) of child age to filename.
+
+#### Usage
+
+    ruby tools/build_agemap.rb path/to/childes
+
+
+
+
+
+## xml2corpus
+
+Takes an XML file, extracts all of the utterances, and prints a TargetCorpus
+(see [doches/corncob][]) using nouns from the POStag list as target words.
+Like **cha2xml**, you probably want to call this automatically from some 
+other script.
+Takes an optional key to ignore (e.g. CHI)
+
+#### Usage
+
+    ruby tools/xml2corpus.rb path/to/childes.xml <ignore_key>
+
+
+
+
+
+## filter\_corpus
+
+Filters a target corpus (from standard input) to include only lines involving target
+words from a list, printing the result to standard out. Used to clean up the output 
+of **xml2corpus** according to the output of **filter_nouns**.
+
+#### Usage
+
+    [cat file.target_corpus] | ruby tools/filter_corpus.rb path/to/nouns.filtered
 
 
 
@@ -77,44 +136,14 @@ dialog to STDOUT
 
 
 
-## build\_agemap
+## compute\_reading\_levels
 
-Takes a directory containing CHILDES XML and prints a 
-mapping (tab-delimited) of child age to filename.
-
-#### Usage
-
-    ruby tools/build_agemap.rb path/to/childes
-
-
-
-
-
-## centralize\_xml
-
-Replicates the directory structure of *input* in *output*, copying
-only xml files over into the new structure. Use this after **xmlize**, 
-to build a version of CHILDES containing only XML. You don't have to 
-do this (other tools will silently ignore `.cha` files, preferring XML), 
-but it satisfies my housekeeping urges.
+Compute reading levels for each document in a directory, and produce
+a data file ready for plotting with GnuPlot.
 
 #### Usage
 
-    ruby tools/centralize_xml.rb path/to/CHILDES/input path/to/xml/output
-
-
-
-
-
-## extract\_nouns
-
-Looks recursively in a directory for xml, scanning each file found
-for nouns in the POS tag list and outputting a list of all nouns
-found (plus counts)
-
-#### Usage
-
-    ruby tools/extract_nouns.rb path/to/xml/root
+    ruby tools/compute_reading_levels.rb path/to/dir > file.dat
 
 
 
@@ -132,32 +161,16 @@ Scans a diretory for .cha files, converting any it finds into dialog XML
 
 
 
-## xml2corpus
+## filter\_nouns
 
-Takes an XML file, extracts all of the utterances, and prints a TargetCorpus
-(see [doches/corncob][]) using nouns from the POStag list as target words.
-Like **cha2xml**, you probably want to call this automatically from some 
-other script.
-Takes an optional key to ignore (e.g. CHI)
-
-#### Usage
-
-    ruby tools/xml2corpus.rb path/to/childes.xml <ignore_key>
-
-
-
-
-
-## cluster\_wordnet\_nouns
-
-Reads a list of noun/count pairs from STDIN (like the output of
-extract_nouns or filter_nouns) and prints a yaml clustering based
-on their first-order WordNet synsets. 
+Reads a list of noun/counts (as output by extract_nouns) from STDIN,
+filtering the list to include only nouns appearing in WordNet (as nouns).
 Requires [doches/rwordnet][].
 
+
 #### Usage
 
-    [cat noun.list] | ruby tools/cluster_wordnet_nouns.rb
+    [cat noun.txt] | ruby tools/filter_nouns.rb
 
 
 
@@ -176,15 +189,47 @@ one per each six-month period
 
 
 
-## filter\_corpus
+## reading\_level
 
-Filters a target corpus (from standard input) to include only lines involving target
-words from a list, printing the result to standard out. Used to clean up the output 
-of **xml2corpus** according to the output of **filter_nouns**.
+Compute reading levels (e.g. [Coleman-Liau Index][], [Automated Readability Index][], [Flesh-Kincaid][] Readability Test) for a given target_corpus
+
+#### Input
+
+One sentence per line.
+
 
 #### Usage
 
-    [cat file.target_corpus] | ruby tools/filter_corpus.rb path/to/nouns.filtered
+    ruby tools/reading_level.rb path/to/file.target_corpus <options>
+
+
+
+#### Output
+
+Prints a tab-delimited list of metric names as a comment (e.g. "# coleman  ari words"), followed
+by a tab-delimited list of computed metrics (e.g. "4.3  4.1 6.0 132.8")
+
+#### Options
+
+   + **--ari** [Automated Readability Index][]
+   + **--coleman** [Coleman-Liau Index][]
+   + **--fkre** [Flesh-Kincaid][] Readability Test
+   + **--words** Average number of words per sentence
+   + **--syllables** Average number of syllables per sentence
+   + **--characters** Average number of characters per sentence
+
+
+
+
+## extract\_nouns
+
+Looks recursively in a directory for xml, scanning each file found
+for nouns in the POS tag list and outputting a list of all nouns
+found (plus counts)
+
+#### Usage
+
+    ruby tools/extract_nouns.rb path/to/xml/root
 
 
 
@@ -192,5 +237,8 @@ of **xml2corpus** according to the output of **filter_nouns**.
 
   [doches/corncob]: http://github.com/doches/corncob
   [doches/rwordnet]: http://github.com/doches/rwordnet
-  [CHILDES]: http://childes.psy.cmu.edu/
   [rbtagger]: http://rubygems.org/gems/rbtagger
+  [CHILDES]: http://childes.psy.cmu.edu/
+  [Automated Readability Index]: http://en.wikipedia.org/wiki/Automated_Readability_Index
+  [Flesh-Kincaid]: http://en.wikipedia.org/wiki/Flesch-Kincaid_Readability_Test
+  [Coleman-Liau Index]: http://en.wikipedia.org/wiki/Coleman-Liau_Index

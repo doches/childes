@@ -27,7 +27,7 @@ Dir.foreach(tooldir) do |file|
 			if line[0].chr == "#"
 				line = line[2..line.size]
 				break if line =~ /^@nodoc/
-				if line =~ /^@link ([^ ]+) ([^ ]+)$/
+				if line =~ /^@link \"?([^\"]+)\"? \"?([^ ]+)\"?$/
 					# A URL link
 					links[$1.strip] = $2.strip
 				elsif line =~ /^([^ :]+): ?(.+)?/
@@ -52,6 +52,10 @@ skeleton_keys = {
 	"==LINKS==" => links.map { |key,url| "  [#{key}]: #{url}" }.join("\n")
 }
 
+skeleton.each do |line|
+  skeleton_keys.each { |k,v| line.gsub!(k,v) }
+end
+
 fout = File.open("README.mdown","w")
-fout.puts skeleton.map { |line| line.gsub(/==[^=]+==/,skeleton_keys) }.join("")
+fout.puts skeleton
 fout.close
