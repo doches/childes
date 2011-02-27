@@ -24,6 +24,20 @@ This repository is a central place for various CHILDES-related tools, scripts, a
 
 ### Tools
 
+## xml2document
+
+Takes an XML file, extracts all of the utterances, and prints them to 
+standard output for later processing.
+Takes an optional key to ignore (e.g. CHI)
+
+#### Usage
+
+    ruby tools/xml2document.rb path/to/childes.xml <ignore_key>
+
+
+
+
+
 ## cluster\_wordnet\_nouns
 
 Reads a list of noun/count pairs from STDIN (like the output of
@@ -132,6 +146,19 @@ dialog to STDOUT
    + **--clean** Remove words containing nonsensical (i.e. non-word) characters.
    + **--minipar** Run utterances through MINIPAR, including the result in the `<parse>` tag. Looks for `./vendor/pdemo/pdemo`, with data files in `./vendor/data`.
    + **--tag** Run utterances through a [pure Ruby implementation of the Brill tagger][rbtagger], including the result in the `<tags>` tag.
+
+
+
+
+## agemap2documents
+
+Reads an agemap from standard input and creates a set of nlda-friendly 
+corpora in <output>, binned into six-month periods
+
+#### Usage
+
+    cat [agemap] | ruby tools/agemap2nldacorpora.rb path/to/output
+
 
 
 
