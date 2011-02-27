@@ -18,9 +18,9 @@ end
 # Parse each age/bin corpus
 progress = ProgressBar.new("Corpusizing",bins.size)
 bins.each_pair do |age,list|
-  `mkdir -p #{File.join(output,age)}`
+  `mkdir -p #{File.join(output,age.to_s)}`
   list.each_with_index do |pair,index|
-    path = File.join(output,age,"#{index}.target_corpus")
+    path = File.join(output,age.to_s,"#{index}.target_corpus")
     `ruby tools/xml2corpus.rb #{pair[1]} #{pair[0]} > #{path}`
   end
   progress.inc
