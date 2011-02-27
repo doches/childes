@@ -5,9 +5,12 @@
 
 require 'tools/util'
 require 'nokogiri'
+require 'progressbar'
 
 files = []
-scan(ARGV.shift,/xml$/).each do |file|
+indir = scan(ARGV.shift,/xml$/)
+progress = ProgressBar.new("Scanning",indir.size)
+indir.each do |file|
 	doc = Nokogiri::XML(File.open(file))
 	child = doc.xpath("//ID").reject { |node| not node.text.downcase.include?("child") }.map { |x| x.text }
 	
@@ -21,7 +24,10 @@ scan(ARGV.shift,/xml$/).each do |file|
 		STDERR.puts "## #{file}"
 		STDERR.puts doc.xpath("//ID").map { |x| x.text }.join("\n")
 	end
+	
+	progress.inc
 end
+progress.finish
 
 files.sort { |a,b| a[0] <=> b[0] }.each { |pair| puts pair.join("\t") }
 
