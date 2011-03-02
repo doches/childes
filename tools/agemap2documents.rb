@@ -1,5 +1,5 @@
 # Reads an agemap from standard input and creates a set of nlda-friendly 
-# corpora in <output>, binned into six-month periods
+# corpora in <output>, binned into variable month periods
 #
 # Usage: cat [agemap] | ruby tools/agemap2nldacorpora.rb path/to/output
 
@@ -7,12 +7,13 @@ require 'progressbar'
 
 output = ARGV.shift
 
+bin_size = 1
 bins = {}
 STDIN.each_line do |line|
 	age, key, path = *line.strip.split("\t")
 	
-	bins[(age.to_i / 6)*6] ||= []
-	bins[(age.to_i / 6)*6].push [key,path]
+	bins[(age.to_i / bin_size)*bin_size] ||= []
+	bins[(age.to_i / bin_size)*bin_size].push [key,path]
 end
 
 # Parse each age/bin corpus
